@@ -14,13 +14,36 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
+# Check if firewalld is installed and running
+if ! systemctl is-active --quiet firewalld; then
+    print_message "firewalld is not running. Attempting to start it..."
+    systemctl start firewalld
+    systemctl enable firewalld
+fi
+
+# Open ports 80, 8080, and 443
+print_message "Opening ports 80, 8080, and 443..."
+firewall-cmd --zone=public --add-port=80/tcp --permanent
+firewall-cmd --zone=public --add-port=8080/tcp --permanent
+firewall-cmd --zone=public --add-port=443/tcp --permanent
+
+# Reload firewall to apply changes
+print_message "Reloading firewall..."
+firewall-cmd --reload
+
+# Verify the changes
+print_message "Verifying changes..."
+firewall-cmd --list-all
+
+print_message "Ports 80, 8080, and 443 have been opened successfully."
+
 # Change timezone to India
 print_message "Changing timezone to India (Asia/Kolkata)"
 timedatectl set-timezone Asia/Kolkata
 
 # Install EPEL repository and Nginx
-print_message "Installing Nginx"
-dnf install -y nginx
+print_message "Installing git & Nginx"
+dnf install -y git nginx
 
 # Start and enable Nginx
 print_message "Starting and enabling Nginx"
