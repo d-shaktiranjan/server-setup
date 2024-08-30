@@ -33,7 +33,7 @@ sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_
 
 # Restart SSH service
 print_message "Restarting SSH service"
-systemctl restart sshd
+systemctl restart ssh
 
 # Ensure .ssh directory exists
 print_message "Creating .ssh directory"
