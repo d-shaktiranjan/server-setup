@@ -38,14 +38,6 @@ sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_
 print_message "Restarting SSH service"
 systemctl restart ssh
 
-# Ensure .ssh directory exists
-print_message "Creating .ssh directory"
-mkdir -p /root/.ssh
-chmod 700 /root/.ssh
-
-# Ensure correct permissions on authorized_keys
-chmod 600 /root/.ssh/authorized_keys
-
 # Create the user named ubuntu
 print_message "Creating user 'ubuntu'"
 useradd -m -s /bin/bash ubuntu
@@ -58,9 +50,25 @@ usermod -aG sudo ubuntu
 print_message "Disabling password login for 'ubuntu'"
 passwd -d ubuntu  # Removes any existing password
 
+# Define the authorized_keys file path
+AUTHORIZED_KEYS_FILE="/home/ubuntu/.ssh/authorized_keys"
+
+# Create the .ssh directory if it doesn't exist
+SSH_DIR="/home/ubuntu/.ssh"
+if [ ! -d "$SSH_DIR" ]; then
+    mkdir -p "$SSH_DIR"
+    chmod 700 "$SSH_DIR"
+    chown ubuntu:ubuntu "$SSH_DIR"
+fi
+
+# Ensure the authorized_keys file exists and has the correct permissions
+touch "$AUTHORIZED_KEYS_FILE"
+chmod 600 "$AUTHORIZED_KEYS_FILE"
+chown ubuntu:ubuntu "$AUTHORIZED_KEYS_FILE"
+
 # Add SSH public keys to authorized_keys
 print_message "Adding SSH public keys to authorized_keys"
-cat << 'EOF' >> /home/ubuntu/.ssh/authorized_keys
+cat << 'EOF' >> $AUTHORIZED_KEYS_FILE
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOHDV/GXK5SNvVj954rQmYx4f5oicCXWdo0aw1ElkYsR rchoudhury63@gmail.com
 ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFpDBlyev/RfBkOe/AuuX9rW6xW+cgFQq6F/Bp4UaCYl debatashaktiranjan@gmail.com
 EOF
