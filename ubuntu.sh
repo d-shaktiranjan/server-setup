@@ -33,6 +33,7 @@ systemctl enable nginx
 # Configure SSH
 print_message "Configuring SSH"
 sed -i 's/^#*PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
+sed -i 's/^#*PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
 
 # Restart SSH service
 print_message "Restarting SSH service"
@@ -46,9 +47,9 @@ useradd -m -s /bin/bash ubuntu
 print_message "Adding 'ubuntu' to the sudo group"
 usermod -aG sudo ubuntu
 
-# Disable password login for the 'ubuntu' user
-print_message "Disabling password login for 'ubuntu'"
-passwd -d ubuntu  # Removes any existing password
+# Configure passwordless sudo for all users in sudo group
+print_message "Configuring passwordless sudo for sudo group"
+echo "%sudo ALL=(ALL:ALL) NOPASSWD:ALL" | EDITOR='tee -a' visudo
 
 # Define the authorized_keys file path
 AUTHORIZED_KEYS_FILE="/home/ubuntu/.ssh/authorized_keys"
