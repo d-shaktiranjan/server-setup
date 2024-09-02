@@ -50,5 +50,17 @@ EOF
 # Ensure correct permissions on authorized_keys
 chmod 600 /root/.ssh/authorized_keys
 
+# Create the user named ubuntu
+print_message "Creating user 'ubuntu'"
+useradd -m -s /bin/bash ubuntu
+
+# Add the user to the sudo group
+print_message "Adding 'ubuntu' to the sudo group"
+usermod -aG sudo ubuntu
+
+# Disable password login for the 'ubuntu' user
+print_message "Disabling password login for 'ubuntu'"
+passwd -d ubuntu  # Removes any existing password
+
 print_message "Setup completed successfully"
 
