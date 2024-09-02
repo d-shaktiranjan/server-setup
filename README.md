@@ -3,7 +3,7 @@
 Run this on Ubuntu
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/d-shaktiranjan/server-setup/main/ubuntu.sh | bash
+curl -sSL https://raw.githubusercontent.com/d-shaktiranjan/server-setup/main/runner.sh | bash
 ```
 
 Run this to install NodeJS
