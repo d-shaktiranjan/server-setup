@@ -50,7 +50,11 @@ usermod -aG sudo ubuntu
 
 # Configure passwordless sudo for all users in sudo group
 print_message "Configuring passwordless sudo for sudo group"
-echo "%sudo ALL=(ALL:ALL) NOPASSWD:ALL" | EDITOR='tee -a' visudo
+sed -i 's/^%sudo.*$/%sudo ALL=(ALL:ALL) NOPASSWD:ALL/' /etc/sudoers
+# fallback if line doesn't exist
+if ! grep -q "^%sudo ALL=(ALL:ALL) NOPASSWD:ALL" /etc/sudoers; then
+    echo "%sudo ALL=(ALL:ALL) NOPASSWD:ALL" >> /etc/sudoers
+fi
 
 # Define the authorized_keys file path
 AUTHORIZED_KEYS_FILE="/home/ubuntu/.ssh/authorized_keys"
