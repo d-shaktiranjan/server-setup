@@ -18,9 +18,12 @@ fi
 print_message "Changing timezone to India (Asia/Kolkata)"
 timedatectl set-timezone Asia/Kolkata
 
+# Update packages
+apt update && apt upgrade
+
 # Install Nginx
 print_message "Installing Nginx"
-apt update && apt install -y nginx
+apt install -y nginx
 
 # Start and enable Nginx
 print_message "Starting and enabling Nginx"
