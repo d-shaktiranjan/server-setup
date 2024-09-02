@@ -65,5 +65,16 @@ usermod -aG sudo ubuntu
 print_message "Disabling password login for 'ubuntu'"
 passwd -d ubuntu  # Removes any existing password
 
+# Prompt user to install Node.js
+read -p "Do you want to install Node.js (latest LTS)? [y/n]: " install_node
+
+if [[ $install_node =~ ^[Yy]$ ]]; then
+    print_message "Installing Node.js..."
+    curl -sSL https://raw.githubusercontent.com/d-shaktiranjan/server-setup/main/node_install.sh | bash
+    print_message "Node.js installation completed."
+else
+    print_message "Node.js installation skipped."
+fi
+
 print_message "Setup completed successfully"
 
