@@ -19,7 +19,8 @@ print_message "Changing timezone to India (Asia/Kolkata)"
 timedatectl set-timezone Asia/Kolkata
 
 # Update packages
-apt update && apt upgrade
+print_message "Updating packages"
+apt update && apt upgrade -y
 
 # Install Nginx
 print_message "Installing Nginx"
