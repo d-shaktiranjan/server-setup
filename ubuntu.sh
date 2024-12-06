@@ -18,6 +18,14 @@ fi
 print_message "Changing timezone to India (Asia/Kolkata)"
 timedatectl set-timezone Asia/Kolkata
 
+# Configure swap
+print_message "Configuring swap"
+sudo fallocate -l 1G /swapfile
+sudo chmod 600 /swapfile
+sudo mkswap /swapfile
+sudo swapon /swapfile
+echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
 # Update packages
 print_message "Updating packages"
 apt update && apt upgrade -y
