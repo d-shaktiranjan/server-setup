@@ -118,3 +118,12 @@ if docker --version >/dev/null 2>&1; then
 else
     error "Docker installation verification failed. Please restart your system and try again."
 fi
+
+# Add Docker cleanup cronjob
+info "Setting up Docker cleanup cronjob..."
+CRON_CMD="0 3 * * * /usr/bin/docker system prune --all --force --volumes"
+(crontab -l 2>/dev/null | grep -v "docker system prune" || true; echo "$CRON_CMD") | crontab - || {
+    error "Failed to add Docker cleanup cronjob"
+    exit 1
+}
+info "Added cronjob for daily Docker cleanup at 3 AM"
